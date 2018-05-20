@@ -4,11 +4,12 @@ const crypto = require('crypto');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+    id: {type: mongoose.Schema.Types.ObjectId},
     firstName: { type: String, required: true, max: 100, index: true },
     lastName: { type: String, required: true, max: 100 },
     login: { type: String, required: true, max: 100, index: true },
     password: { type: String, required: true, max: 100 },
-    email: { type: String }
+    email: { type: String, required: true, max: 100, index: true }
 });
 
 UserSchema.index({ firstName: 1, lastName: 1 });
