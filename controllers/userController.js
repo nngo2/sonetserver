@@ -42,6 +42,23 @@ exports.createUser = function(req, res, next){
     });
 };
 
+
+exports.checkOnlineUser = function(data){
+    return new Promise(async (resolve, reject) => {
+       try {
+           User.findOne({id: data.id})
+               .exec(function(err, data){
+                   if(err)  reject(err);
+                   resolve(data);
+               });
+       }
+       catch (err) {
+           reject(err);
+       }
+    });
+};
+
+
 exports.updateUser = function(req, res, next){
     var id = mongoose.Types.ObjectId(req.body.id);
 
