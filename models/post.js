@@ -9,11 +9,10 @@ const PostSchema = new Schema({
     time: { type: Date, required: true },
     content: { type: String, required: true, max: 500 },
     image: { type: String, max: 100 },
-    users: [String],
     comments: [{
-        username: { type: String, required: true, max: 100, index: true },
+        username: { type: String, max: 100, index: true },
         time: { type: Date, required: true },
-        content: { type: String, required: true, max: 500 },
+        content: { type: String, max: 500 },
     }]
 });
 
