@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const User = require('../models/user');
 
 exports.getAll = function(req, res, next){
@@ -18,7 +19,7 @@ exports.findByEmail = function(req, res, next){
 }
 
 exports.findByLogin = function(req, res, next){
-    User.findOne({login: req.params.id})
+    User.findOne({login: req.params.login})
         .exec(function(err, data){
             if(err) return next(err);
             res.json(data);
@@ -57,3 +58,22 @@ exports.checkOnlineUser = function(data){
     });
 };
 
+
+exports.updateUser = function(req, res, next){
+    var id = mongoose.Types.ObjectId(req.body.id);
+
+    var user = new User({
+        _id: id,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName
+    });
+
+    if (req.body.password) {
+        user.password = User.encryptPassword(req.body.password);
+    }
+
+    User.findByIdAndUpdate({_id: id}, user, {new: true}, function(err, data){
+        if(err) return next(err);
+        res.json(data);
+    });
+};
