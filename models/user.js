@@ -14,6 +14,10 @@ const UserSchema = new Schema({
 
 UserSchema.index({ firstName: 1, lastName: 1 });
 
+UserSchema.statics.encryptPassword = function (text) {
+    return encrypt(text);
+};
+
 UserSchema
     .virtual('fullName')
     .get(function () {
