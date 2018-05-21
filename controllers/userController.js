@@ -18,7 +18,7 @@ exports.findByEmail = function(req, res, next){
 }
 
 exports.findByLogin = function(req, res, next){
-    User.findOne({login: req.params.id})
+    User.findOne({login: req.params.login})
         .exec(function(err, data){
             if(err) return next(err);
             res.json(data);
