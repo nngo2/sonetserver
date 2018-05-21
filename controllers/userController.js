@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const User = require('../models/user');
 
 exports.getAll = function(req, res, next){
@@ -38,5 +39,24 @@ exports.createUser = function(req, res, next){
         res.json(data);
     }).catch(function(err){
         if(err) return next(err);
+    });
+};
+
+exports.updateUser = function(req, res, next){
+    var id = mongoose.Types.ObjectId(req.body.id);
+
+    var user = new User({
+        _id: id,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName
+    });
+
+    if (req.body.password) {
+        user.password = User.encryptPassword(req.body.password);
+    }
+
+    User.findByIdAndUpdate({_id: id}, user, {new: true}, function(err, data){
+        if(err) return next(err);
+        res.json(data);
     });
 };
