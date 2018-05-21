@@ -40,3 +40,20 @@ exports.createUser = function(req, res, next){
         if(err) return next(err);
     });
 };
+
+
+exports.checkOnlineUser = function(data){
+    return new Promise(async (resolve, reject) => {
+       try {
+           User.findOne({id: data.id})
+               .exec(function(err, data){
+                   if(err)  reject(err);
+                   resolve(data);
+               });
+       }
+       catch (err) {
+           reject(err);
+       }
+    });
+};
+
