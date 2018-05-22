@@ -9,7 +9,7 @@ const UserSchema = new Schema({
     lastName: { type: String, required: true, max: 100 },
     login: { type: String, required: true, max: 100, index: true },
     password: { type: String, required: true, max: 100 },
-    isOnline: { type: Boolean},
+    status: {isOnline: { type: Boolean}, socketId: String},
     email: { type: String, required: true, max: 100, index: true }
 });
 

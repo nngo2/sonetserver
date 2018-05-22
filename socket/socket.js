@@ -13,13 +13,23 @@ class Socket{
 		this.io.on('connection', (socket) => {
 			socket.on(`add-message`, async (data) => {
 					try{
-						this.io.emit(`add-message-response`,data);
+					    if(data && data.toUserId){
+                            const socketResult = await userController.getUserSocketId(data.toUserId);
+                            this.io.to(socketResult.status.socketId).emit(`add-message-response`,data);
+                        }
 					} catch (error) {
 						this.io.to(socket.id).emit(`add-message-response`,{
-							error : true
 						}); 
 					}
 			});
+
+            socket.on('logout', async (data)=>{
+                try {
+                    const userId = data.userId;
+                    await userController.disConnectUser({userId: userId});
+                }catch (e) {
+                }
+            });
 
 		});
 	}

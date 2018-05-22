@@ -43,19 +43,11 @@ exports.createUser = function(req, res, next){
 };
 
 
-exports.checkOnlineUser = function(data){
-    return new Promise(async (resolve, reject) => {
-       try {
-           User.findOne({id: data.id})
-               .exec(function(err, data){
-                   if(err)  reject(err);
-                   resolve(data);
+exports.getOnlineUsers = function(req, res, next){
+           User.find({"status.isOnline": true},'_id firstName lastName',  function(err, data){
+                   if(err)  return next(err);
+                   res.json(data);
                });
-       }
-       catch (err) {
-           reject(err);
-       }
-    });
 };
 
 exports.addUserSocket = function(data){
@@ -77,6 +69,33 @@ exports.addUserSocket = function(data){
     });
 };
 
+exports.disConnectUser = function(data){
+    return new Promise(async (resolve, reject) => {
+        var id = mongoose.Types.ObjectId(data.userId);
+        var user = new User({
+            _id: id,
+            status: { isOnline: false, socketId: null}
+        });
+        try {
+            User.findByIdAndUpdate({_id: id}, user, {new: true}, function(err, result){
+                if(err) return reject(err);
+                resolve(result);
+            });
+        }
+        catch (err) {
+            reject(err);
+        }
+    });
+};
+
+exports.getUserSocketId = function(socketId){
+    return new Promise(async (resolve, reject) =>{
+        User.findById({_id: socketId},'status.socketId',  function(err, data){
+            if(err)  reject(err);
+            resolve(data);
+        });
+    })
+};
 
 exports.updateUser = function(req, res, next){
     var id = mongoose.Types.ObjectId(req.body.id);
