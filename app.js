@@ -12,6 +12,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const registerRouter = require('./routes/register');
+const postsRouter = require('./routes/post');
 
 const mongoose = require('mongoose');
 
@@ -63,6 +64,7 @@ app.use('/', indexRouter);
 app.use('/register', registerRouter);
 app.use('/auth', loginRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/posts', postsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
