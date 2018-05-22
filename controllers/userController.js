@@ -58,6 +58,25 @@ exports.checkOnlineUser = function(data){
     });
 };
 
+exports.addUserSocket = function(data){
+    return new Promise(async (resolve, reject) => {
+        var id = mongoose.Types.ObjectId(data.userId);
+        var user = new User({
+            _id: id,
+            status: { isOnline: true, socketId: data.socketId}
+        });
+        try {
+            User.findByIdAndUpdate({_id: id}, user, {new: true}, function(err, result){
+                if(err) return reject(err);
+                resolve(result);
+            });
+        }
+        catch (err) {
+            reject(err);
+        }
+    });
+};
+
 
 exports.updateUser = function(req, res, next){
     var id = mongoose.Types.ObjectId(req.body.id);
