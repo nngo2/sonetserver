@@ -14,6 +14,20 @@ exports.findByUser = function(req, res, next){
         });
 }
 
+exports.searchPosts = function(req, res, next){
+    var page = req.params.page;
+    var keywords = req.body.keywords;    
+    Post
+    .find({ $text : { $search : keywords } }, 
+        { score : { $meta: "textScore" } },
+        {skip: page * PAGE_SIZE, limit: PAGE_SIZE})
+    .sort({ score : { $meta : 'textScore' } })
+    .exec(function(err, posts){
+            if(err) return next(err);
+            res.json(posts);
+        });
+}
+
 exports.findRecentPosts = function(req, res, next){
     var page = req.params.page;
     Post.find({}, {}, {skip: page * PAGE_SIZE, limit: PAGE_SIZE})

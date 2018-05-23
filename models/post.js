@@ -16,6 +16,8 @@ const PostSchema = new Schema({
     }]
 });
 
+PostSchema.index({ content: 'text', 'comments.content': 'text' });
+
 PostSchema
     .virtual('postTime')
     .get(function () {
