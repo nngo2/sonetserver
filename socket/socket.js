@@ -26,10 +26,18 @@ class Socket{
             socket.on('logout', async (data)=>{
                 try {
                     const userId = data.userId;
+                    console.log('disconnect user Id: ' + userId);
                     await userController.disConnectUser({userId: userId});
                 }catch (e) {
                 }
             });
+            socket.on('disconnect', async (data)=>{
+                try {
+                   	console.log('disconnect socket Id: ' + socket.id);
+                    await userController.disConnectSocket(socket.id);
+                }catch (e) {
+                }
+            })
 
 		});
 	}

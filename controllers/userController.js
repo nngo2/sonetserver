@@ -95,6 +95,21 @@ exports.disConnectUser = function(data){
     });
 };
 
+exports.disConnectSocket = function(socketId){
+    return new Promise(async (resolve, reject) => {
+        try {
+            User.findOneAndUpdate({"status.socketId": socketId}, { status: { isOnline: false, socketId: null}}, {new: true}, function(err, result){
+                if(err) return reject(err);
+                resolve(result);
+            });
+        }
+        catch (err) {
+            reject(err);
+        }
+    });
+};
+
+
 exports.getUserSocketId = function(socketId){
     return new Promise(async (resolve, reject) =>{
         User.findById({_id: socketId},'status.socketId',  function(err, data){

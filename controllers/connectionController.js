@@ -9,7 +9,11 @@ exports.getFriendList = function(req, res, next){
             if(err) {
                 return next(err);
             };
-            res.json(con.friends);
+            if(con){
+                res.json(con.friends);
+            }else{
+                res.sendStatus(200);
+            }
         })
 }
 
@@ -18,6 +22,9 @@ exports.addFriend = function (req, res, next) {
     const friendId =  mongoose.Types.ObjectId(req.query.friendId);
     Connection.findOneAndUpdate({_id : userId}, {$push : {friends : friendId}},{upsert:true}, (err, updated) => {
         if(err) return next(err);
-        res.sendStatus(200);
+        Connection.findOneAndUpdate({_id : friendId}, {$push : {friends : userId}},{upsert:true}, (err, updated) => {
+            if(err) return next(err);
+            res.sendStatus(200);
+        });
     });
 }
