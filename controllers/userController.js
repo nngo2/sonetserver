@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
 const User = require('../models/user');
 
-exports.getAll = function(req, res, next){
+exports.findUsers = function(req, res, next){
+    const searchQuery = req.query.searchStr;
+    const first = Number(req.query.first);
+    const limit = Number(req.query.limit);
     User.find()
+        .or([{firstName: { "$regex": searchQuery}}, {lastName: { "$regex":searchQuery}}])
+        .select('_id firstName lastName status')
         .sort([['lastName', 'ascending']])
+        .skip(first)
+        .limit(limit)
         .exec(function(err, users){
             if(err) return next(err);
             res.json(users);
