@@ -2,10 +2,13 @@ const mongoose = require('mongoose');
 const Connection = require('../models/connections');
 
 exports.getFriendList = function(req, res, next){
-    Connection.findById(req.params.id)
-        .populated({path: 'friends', select: '_id firstName lastName status'})
+    console.log('getting friends of user: ' + req.params.id);
+    Connection.findById(mongoose.Types.ObjectId(req.params.id))
+        .populate({path: 'friends', select: '_id firstName lastName status'})
         .exec((err, con) => {
-            if(err) return next(err);
+            if(err) {
+                return next(err);
+            };
             res.json(con.friends);
         })
 }
