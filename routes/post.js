@@ -7,6 +7,7 @@ router.get('/user/:username', postController.findByUser);
 router.get('/recent/:page', postController.findRecentPosts);
 router.post('/', postController.createPost);
 router.post('/search/:page', postController.searchPosts); // /api/posts/search/0
+router.post('/search/v2/:page', postController.searchPosts); // /api/posts/search/v2?p=0
 router.post('/:postId/comments', postController.createPostComment);
 router.get('/:postId/comments', postController.getPostComments);
 
